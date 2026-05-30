@@ -59,6 +59,12 @@ Stale docs are worse than no docs. If you change reality, change the knowledge b
 - **Always work on a dedicated work branch.** Before making changes, create one off `main`
   (e.g. `git checkout -b <descriptive-branch>`). If you find yourself on `main`, branch
   first.
+- **Branch from an up-to-date `main`, and keep `main` up to date.** Before creating a new
+  work branch, sync first: `git fetch origin` and base the branch on the latest `origin/main`
+  (e.g. `git checkout -b <descriptive-branch> origin/main`), and fast-forward your local
+  `main` to `origin/main` (`git checkout main && git pull --ff-only`) so it never drifts.
+  This keeps every branch current with `main` from the start and avoids stale-base conflicts.
+  (After a PR merges, fetch again so the next branch starts from the merged state.)
 - **Open a pull request when you consider the task complete.** Push the branch and run
   `gh pr create` with a clear title and a body summarizing what changed and why (and how it
   was verified). Treat the PR as the deliverable — a task is not "done" until its PR exists.
