@@ -1,8 +1,8 @@
 # Spike B — embedded Lua runtime driving a live bar
 
 Throwaway de-risking spike. **Not the product.** Brief:
-[`docs/spikes/spike-b-lua-runtime.md`](../../docs/spikes/spike-b-lua-runtime.md).
-Result: **GO** — read [`FINDINGS.md`](FINDINGS.md) first.
+[`tasks/spike-b/task.md`](../task.md).
+Result: **GO** — read [`FINDINGS.md`](../FINDINGS.md) first.
 
 ## Run
 

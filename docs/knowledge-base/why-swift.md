@@ -6,13 +6,16 @@ The case for noribar's stack (Swift + AppKit/CALayer + embedded Lua) versus sket
 the reasoning isn't scattered across three ADRs. For how sketchybar itself is built, see
 [sketchybar-reference.md](sketchybar-reference.md).
 
-> **Honesty note.** Several wins below are *contingent* on the de-risking spikes. The
-> AppKit-inside-private-SkyLight bridge — once the biggest unknown — is now **proven** by
-> [Spike A](../spikes/spike-a-render-window.md) ([findings](../../spikes/spike-a/FINDINGS.md),
-> locked as [D6](decisions.md)): native symbol effects run at ~0% idle CPU in an
-> SLS-retagged panel. The Lua-stack wins still await [Spike B](../spikes/spike-b-lua-runtime.md).
-> Treat *those* as the upside case, not a measured result, until that spike returns. Stale
-> optimism is worse than none.
+> **Honesty note.** The two wins that were once *contingent* on de-risking spikes are now
+> both **proven**: the AppKit-inside-private-SkyLight bridge by
+> [Spike A](../../tasks/spike-a/task.md) ([findings](../../tasks/spike-a/FINDINGS.md), locked
+> as [D6](decisions.md)) — native symbol effects at ~0% idle CPU in an SLS-retagged panel;
+> and the embedded-Lua stack by [Spike B](../../tasks/spike-b/task.md)
+> ([findings](../../tasks/spike-b/FINDINGS.md), locked as [D7](decisions.md)) — ~1.7 µs
+> per-tick overhead, crash-isolated, hot-reloadable. The one win below still *unmeasured at
+> product scale* is **memory footprint** (§1): the spikes' early numbers are encouraging
+> (~48 MB AppKit panel, <1 MB for Lua) but a fully-featured bar isn't built yet. Treat that
+> row as a projection; the rest are now measured.
 
 ---
 
@@ -23,11 +26,11 @@ will be higher; the big win is event/reactivity overhead; the big unknown is mem
 
 | Dimension | vs. sketchybar | Why |
 |---|---|---|
-| Idle CPU | **Tie** (~0%) | Both tear down the display link when nothing animates ([sketchybar-reference.md](sketchybar-reference.md), [architecture.md](architecture.md) render layer). The single most important perf lesson to copy — see [Q4](open-questions.md). [Spike A](../spikes/spike-a-render-window.md) **measured 0.0% idle** with native effects live in the panel ([D6](decisions.md)). |
+| Idle CPU | **Tie** (~0%) | Both tear down the display link when nothing animates ([sketchybar-reference.md](sketchybar-reference.md), [architecture.md](architecture.md) render layer). The single most important perf lesson to copy — see [Q4](open-questions.md). [Spike A](../../tasks/spike-a/task.md) **measured 0.0% idle** with native effects live in the panel ([D6](decisions.md)). |
 | Event / reactivity cost | **noribar wins** | sketchybar **spawns an external shell script per event** to recompute item content — its performance floor. noribar uses in-process native providers + Lua callbacks ([D4](decisions.md), [architecture.md](architecture.md)): no `fork`/`exec`, no shell startup per tick. |
 | Command / config latency | **noribar wins** | sketchybar marshals commands over Mach IPC from a separate CLI process. noribar runs config logic in an in-process `lua_State` — no IPC serialization hop. |
 | Per-frame draw | **sketchybar lighter** | sketchybar blits static font glyphs straight into a `CGContext` — about as cheap as on-screen drawing gets. noribar's CALayer tree carries more per-frame overhead, but mitigated by per-item dirty-layer redraw and GPU/window-server compositing, and it can render effects sketchybar cannot at any price. |
-| Memory footprint | **sketchybar lighter** | A ~95% C daemon has a tiny RSS. noribar pulls in the Swift runtime + AppKit/CoreAnimation + an embedded Lua interpreter. Expect tens of MB vs. single-digit. The main standing cost of our stack; worth watching for a forever-running process, but acceptable on any macOS 13+ machine. |
+| Memory footprint | **sketchybar lighter** | A ~95% C daemon has a tiny RSS. noribar pulls in the Swift runtime + AppKit/CoreAnimation + an embedded Lua interpreter. Expect tens of MB vs. single-digit (Spike A's bare AppKit panel measured ~48 MB; embedded Lua added <1 MB in Spike B — but a fully-featured bar is unmeasured). The main standing cost of our stack; worth watching for a forever-running process, but acceptable on any macOS 13+ machine. |
 | Startup | **sketchybar lighter** | Swift runtime + AppKit + Lua init is heavier than a C daemon's cold start. One-time, irrelevant for a long-lived process. |
 | Window compositing | **Tie** | Both own the window via the **same** private SkyLight APIs ([D3](decisions.md)). |
 
@@ -102,7 +105,7 @@ So this doesn't read as cheerleading:
 - **Heavier memory & runtime footprint** — see the table in §1.
 - **The (former) novel risk:** the AppKit-inside-private-SkyLight bridge — sketchybar's
   C+CoreGraphics path through SLS is well-trodden, ours was not — is now **proven** by
-  [Spike A](../spikes/spike-a-render-window.md) (locked as [D6](decisions.md)): a
+  [Spike A](../../tasks/spike-a/task.md) (locked as [D6](decisions.md)): a
   layer-backed AppKit tree runs native symbol effects inside an SLS-retagged panel
   cleanly. Caveat carried forward: one symbol animation per view (RenderBox crashes if
   effects stack on one view).

@@ -31,7 +31,7 @@ Format: each decision has a status, the decision, and the rationale.
   variable color **for free**. See [sketchybar-reference.md](sketchybar-reference.md).
 - **Consequence / risk:** AppKit views must be hosted inside a private-SkyLight window
   (see D3). That bridge is novel — it was de-risked by
-  [Spike A](../spikes/spike-a-render-window.md) and **confirmed viable** (see D6).
+  [Spike A](../../tasks/spike-a/task.md) and **confirmed viable** (see D6).
 
 ## D3 — Window strategy: private SkyLight (SLS/CGS) APIs
 
@@ -59,8 +59,8 @@ Format: each decision has a status, the decision, and the rationale.
 - **Rationale:** More powerful, more shareable, and far less per-tick overhead than
   spawning a process per event. Strong fit for the ricing community.
 - **Consequence / risk:** Must embed and bridge a Lua runtime and define a safe
-  Lua↔main-thread threading model. Being de-risked by
-  [Spike B](../spikes/spike-b-lua-runtime.md).
+  Lua↔main-thread threading model. **Resolved** by [Spike B](../../tasks/spike-b/task.md) —
+  the embedding, threading, crash-isolation and hot-reload mechanics are locked in **D7** below.
 
 ## D5 — Minimum macOS 13, graceful degradation
 
@@ -75,7 +75,7 @@ Format: each decision has a status, the decision, and the rationale.
 ## D6 — Window/render bridge: public `NSPanel` + additive SLS retag (Spike A outcome)
 
 - **Status:** Locked (2026-05-30) — resolves former open question Q1, via
-  [Spike A](../spikes/spike-a-render-window.md) ([findings](../../spikes/spike-a/FINDINGS.md)).
+  [Spike A](../../tasks/spike-a/task.md) ([findings](../../tasks/spike-a/FINDINGS.md)).
 - **Decision:** The bar surface is a borderless **non-activating `NSPanel`**
   (`.accessory` activation policy / `LSUIElement`) that **owns the AppKit/CALayer view
   tree** — so native SF Symbol effects (incl. macOS 26 draw-on/off) work. SkyLight is
@@ -98,7 +98,7 @@ Format: each decision has a status, the decision, and the rationale.
 ## D7 — Lua embedding & threading: vanilla 5.4 C target + dedicated queue (Spike B outcome)
 
 - **Status:** Locked (2026-05-30) — resolves former open question Q2, via
-  [Spike B](../spikes/spike-b-lua-runtime.md) ([findings](../../spikes/spike-b/FINDINGS.md)).
+  [Spike B](../../tasks/spike-b/task.md) ([findings](../../tasks/spike-b/FINDINGS.md)).
 - **Decision:**
   - **Distribution:** vanilla **Lua 5.4.7** vendored as a SwiftPM **C target** (`CLua`),
     MIT-licensed (AGPL-compatible). Public API surfaced to Swift via an umbrella header;

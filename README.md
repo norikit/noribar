@@ -6,8 +6,8 @@ and built around **native, fully-animated SF Symbols**.
 
 A [**norikit**](https://github.com/norikit) project.
 
-> **Status:** early design / de-risking phase. Not yet usable. See
-> [project status](docs/knowledge-base/status.md).
+> **Status:** de-risking complete — both foundational spikes are GO; building the first
+> product skeleton. Not yet usable. See [project status](docs/knowledge-base/status.md).
 
 ## Why another bar?
 
@@ -64,17 +64,19 @@ Full rationale: [decisions.md](docs/knowledge-base/decisions.md).
 
 ## Project status
 
-This project is in the **architecture / de-risking** phase. Two technical spikes define
-the path forward:
+Both foundational de-risking spikes are **complete (GO)** — the two riskiest unknowns are
+resolved and the project is moving to its first product skeleton:
 
-- [Spike A](docs/spikes/spike-a-render-window.md) — AppKit symbol effects inside a
-  SkyLight-empowered window. **✅ Complete (GO):** native effects run at 0.0% idle CPU in
-  a non-activating `NSPanel` with SLS applied additively (locked as
-  [D6](docs/knowledge-base/decisions.md)).
-- [Spike B](docs/spikes/spike-b-lua-runtime.md) — embedded Lua driving a live,
-  hot-reloadable bar. **⏳ Next up.**
+- [Spike A](tasks/spike-a/task.md) — AppKit symbol effects inside a SkyLight-empowered
+  window. **✅ GO:** native effects at 0.0% idle CPU in a non-activating `NSPanel` with SLS
+  applied additively (locked as [D6](docs/knowledge-base/decisions.md)).
+- [Spike B](tasks/spike-b/task.md) — embedded Lua driving a live, hot-reloadable bar.
+  **✅ GO:** vanilla Lua 5.4.7 on a dedicated serial queue, ~1.7 µs/tick, crash-isolated and
+  hot-reloadable (locked as [D7](docs/knowledge-base/decisions.md)).
 
-Track progress in [status.md](docs/knowledge-base/status.md).
+**Next:** [M1 — the integration tracer bullet](tasks/m1-tracer-bullet/task.md), wiring the
+Lua command stream into the SkyLight-hosted symbol-effect tree. All work is tracked on the
+[task board](tasks/README.md); progress in [status.md](docs/knowledge-base/status.md).
 
 ## Documentation
 
@@ -88,12 +90,16 @@ All design knowledge lives in the **[knowledge base](docs/knowledge-base/)**:
 - [Glossary](docs/knowledge-base/glossary.md) — SLS, ricing, SF Symbol terms
 - [Status](docs/knowledge-base/status.md) — current phase + changelog
 
+Active work (spikes, milestones, chores) is tracked as task folders under
+[`tasks/`](tasks/) — see the [task board](tasks/README.md).
+
 > **Working in this repo with an AI agent?** Start at [`CLAUDE.md`](CLAUDE.md).
 
 ## Building
 
-_Not yet — there is no buildable app while the spikes are in progress. Throwaway spike
-code lives under [`docs/spikes`](docs/spikes/) / `spikes/` and is not the product._
+_Not yet — the de-risking spikes are complete but the product skeleton hasn't been built.
+Each piece of work lives as a task folder under [`tasks/`](tasks/) (brief + findings +
+any throwaway PoC code); that spike code is **not** the product._
 
 ## License
 

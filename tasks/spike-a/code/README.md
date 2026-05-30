@@ -4,7 +4,7 @@
 AppKit/CALayer view tree running native SF Symbol effects live in a window that also has
 SkyLight ricing powers (all-Spaces, over-fullscreen, non-activating)?
 
-➡️ **Result: yes.** Read **[FINDINGS.md](FINDINGS.md)** (verdict first).
+➡️ **Result: yes.** Read **[FINDINGS.md](../FINDINGS.md)** (verdict first).
 
 ## Layout
 
