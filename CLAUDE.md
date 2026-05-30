@@ -46,9 +46,23 @@ land a change, or learn something durable:
 
 Stale docs are worse than no docs. If you change reality, change the knowledge base.
 
+## Git workflow: always branch, always PR
+
+**This is a standing instruction from the project owner.** Never commit directly to `main`.
+
+- **Always work on a dedicated work branch.** Before making changes, create one off `main`
+  (e.g. `git checkout -b <descriptive-branch>`). If you find yourself on `main`, branch
+  first.
+- **Open a pull request when you consider the task complete.** Push the branch and run
+  `gh pr create` with a clear title and a body summarizing what changed and why (and how it
+  was verified). Treat the PR as the deliverable — a task is not "done" until its PR exists.
+- **Keep the PR current.** Any follow-up change to the same task — new commits, scope
+  changes, fixes from review — must also update the PR: push the commits and edit the PR
+  title/body (`gh pr edit`) so it always reflects the latest state of the branch.
+- Commit messages and PR bodies should be self-explanatory. License is AGPL-3.0.
+
 ## Conventions
 
 - Match surrounding Swift style; favor clarity and low-latency, main-thread-safe UI code.
 - Spike / throwaway experiments live under `spikes/` (or `docs/spikes/` for their briefs)
   and are explicitly **not** the product.
-- Don't commit or push unless asked. License is AGPL-3.0.

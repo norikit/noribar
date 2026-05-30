@@ -12,12 +12,13 @@ floor) are **already decided** — see [decisions.md](decisions.md) D2–D5.
 > [decisions.md D6](decisions.md): public non-activating `NSPanel` owns the view tree,
 > SLS applied additively. See [findings](../../spikes/spike-a/FINDINGS.md).
 
----
+> **Q2 (Lua runtime + threading model) — RESOLVED 2026-05-30** by
+> [Spike B](../spikes/spike-b-lua-runtime.md). Outcome locked in
+> [decisions.md D7](decisions.md): vanilla Lua 5.4.7 as a SwiftPM C target, on a dedicated
+> serial queue, `pcall`+instruction-hook crash isolation, `lua_close`-based hot reload.
+> See [findings](../../spikes/spike-b/FINDINGS.md).
 
-### Q2 — Lua runtime + threading model ⏳ de-risking
-Vanilla Lua 5.4 vs. wrapper vs. LuaJIT? Dedicated Lua queue vs. main-thread? Hot-reload
-and crash-isolation mechanics? Bindings ergonomics?
-→ **Being answered by [Spike B](../spikes/spike-b-lua-runtime.md).**
+---
 
 ### Q3 — Event / provider system
 In-process native providers (workspace, battery, network, audio, clock, front app) with

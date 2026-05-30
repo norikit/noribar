@@ -71,8 +71,18 @@ discrete effect on one `NSImageView` in the same run-loop turn crashes RenderBox
 Single `lua_State` on a dedicated serial queue. User callbacks/timers produce
 state-change commands marshalled to the main thread; inbound events are funnelled onto
 the Lua queue. All Lua entries wrapped in `pcall` so user-script errors never crash the
-host. Hot-reload supported. Being de-risked by
-[Spike B](../spikes/spike-b-lua-runtime.md).
+host. Hot-reload supported. Approach **confirmed by
+[Spike B](../spikes/spike-b-lua-runtime.md)** (locked as [D7](decisions.md)): vanilla
+**Lua 5.4.7** vendored as a SwiftPM C target (public API surfaced via an umbrella header
+plus a `static inline` shim for Lua's function-like macros); bindings carry their Swift
+context as a light-userdata upvalue and store callbacks as registry refs; crash isolation
+is `pcall` **plus an instruction-count hook** (`lua_sethook`) so even an infinite loop is
+aborted without freezing the UI; hot reload is `lua_close` + rebuild (leak-free over 100
+reloads). Measured per-tick Lua→Swift overhead ~1.7 µs.
+**To build for production (from Spike B findings):** a typed table-field reader +
+`luaL_argerror` validation in the binding layer; a **sandbox policy** for user configs
+(`os`/`io`/`require`); and per-item coalescing of `item:set` icon changes to honor D6's
+one-animation-per-view rule.
 
 ### Providers
 Native Swift sources of system state (workspace/Spaces, battery, network, audio, clock,

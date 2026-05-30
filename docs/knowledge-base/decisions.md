@@ -95,6 +95,42 @@ Format: each decision has a status, the decision, and the rationale.
   animation thread (`EXC_BAD_ACCESS` in `RB::Symbol::Animation::apply`). The bar-state
   model must serialize symbol mutations per item.
 
+## D7 — Lua embedding & threading: vanilla 5.4 C target + dedicated queue (Spike B outcome)
+
+- **Status:** Locked (2026-05-30) — resolves former open question Q2, via
+  [Spike B](../spikes/spike-b-lua-runtime.md) ([findings](../../spikes/spike-b/FINDINGS.md)).
+- **Decision:**
+  - **Distribution:** vanilla **Lua 5.4.7** vendored as a SwiftPM **C target** (`CLua`),
+    MIT-licensed (AGPL-compatible). Public API surfaced to Swift via an umbrella header;
+    Lua's function-like macros (`lua_pcall`, `lua_pop`, …, invisible to the Clang importer)
+    are re-exported through a single `static inline` shim header (`cl_*`). **Not** a Swift
+    wrapper package, **not** LuaJIT (5.1 semantics, speed irrelevant for a status bar).
+  - **Threading:** one `lua_State` owned by a **dedicated serial `DispatchQueue`**, never
+    touched off it. Lua callbacks emit `BarCommand` values; `emit` marshals them to
+    `DispatchQueue.main` where they apply to the AppKit view tree. Timers
+    (`DispatchSourceTimer` on the Lua queue) and events (hopped onto the queue first) are
+    the only inbound paths. The dedicated queue (vs. main-thread-only) is justified by
+    crash containment, not throughput.
+  - **Crash isolation:** every entry into Lua goes through `lua_pcall` + a traceback
+    message handler, and the state carries an **instruction-count hook**
+    (`lua_sethook(LUA_MASKCOUNT)`) that aborts a runaway call. A buggy user script is
+    logged and survived, never fatal.
+  - **Hot reload:** a kqueue file watcher triggers `emit(.clear)` → cancel timers →
+    `lua_close` → fresh state → re-run. Handles in-place **and** atomic-rename saves; no
+    leak across 100 reloads.
+- **Verified:** per-tick Lua→Swift round-trip **~1.7 µs** (p99 < 3 µs); Lua adds **<1 MB**
+  RSS; flat memory across 100 hot reloads; `error()`, nil-index, and infinite-loop faults
+  all caught with the app surviving.
+- **Consequence for later work:**
+  - The production binding layer needs a typed table-field reader and `luaL_argerror`-based
+    validation (the spike hand-juggled the stack and silently defaulted bad args).
+  - The runtime owner must decide a **sandbox policy** for user configs (`os.execute`,
+    `io`, `require`) — open in the spike, a security decision for the product (see
+    [Q8](open-questions.md)).
+  - `item:set` icon changes must **coalesce/serialize symbol mutations per item** on the
+    main side to respect [D6](#d6--windowrender-bridge-public-nspanel--additive-sls-retag-spike-a-outcome)'s
+    one-animation-per-`NSImageView` rule.
+
 ---
 
 ## License
