@@ -16,14 +16,19 @@ before working in this repo. (AI agents: the repo entry point is the root
 | [why-swift.md](why-swift.md) | Rationale dossier — performance comparison + what the Swift/AppKit/Lua stack buys us over sketchybar, with honest counterweights. |
 | [glossary.md](glossary.md) | Domain terms — SkyLight/SLS, ricing, SF Symbol effects, etc. |
 | [status.md](status.md) | Current phase + dated changelog of meaningful progress. |
-| [../spikes/](../spikes/) | De-risking spike briefs (handoff specs for focused experiments). |
+
+This knowledge base is the durable **design** truth. Discrete **work items** (spikes,
+milestones, chores) live separately as task folders under [`tasks/`](../../tasks/), each
+with stateful frontmatter — see the [task index](../../tasks/README.md). Tasks link back
+here via their `resolves:` / `decisions:` fields.
 
 ## Maintenance protocol (read this)
 
 Keeping this current is a **standing requirement**, not optional cleanup:
 
 - **A decision is made** → record it in [decisions.md](decisions.md); if it resolves an
-  open question, remove that entry from [open-questions.md](open-questions.md).
+  open question, replace that entry in [open-questions.md](open-questions.md) with a
+  one-line resolved-pointer to the decision.
 - **The design changes** → update [architecture.md](architecture.md) in the same change.
 - **Meaningful progress happens** → append a dated line to [status.md](status.md).
 - **A new knowledge-base doc is added** → link it in the table above.

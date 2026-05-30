@@ -37,7 +37,7 @@ borderless `.nonactivatingPanel` with `NSApp.setActivationPolicy(.accessory)` +
 dyld shared cache** (its on-disk `Versions/A/` has no Mach-O), so `-framework SkyLight`
 is fragile. AppKit already loads SkyLight into every GUI process, so we bind every
 private symbol at runtime with `dlsym(RTLD_DEFAULT, "SLS…")` (see
-[`SLS.swift`](Sources/SpikeA/SLS.swift)). **No bridging header, no linker flags, no C
+[`SLS.swift`](code/Sources/SpikeA/SLS.swift)). **No bridging header, no linker flags, no C
 target.** Signatures were confirmed against yabai `src/misc/extern.h` and SketchyBar
 `src/window.{c,h}` per the brief (the brief's `const int tags[2]` was wrong — the real
 signature is `uint64_t *tags, int tag_size`; space IDs are `uint64_t`).
@@ -48,8 +48,8 @@ signature is `uint64_t *tags, int tag_size`; space IDs are `uint64_t`).
 
 | # | Criterion | A1 (public only) | A2 (A1 + SLS) | Evidence |
 |---|---|---|---|---|
-| 1 | Live AppKit/CALayer tree running **native** SF Symbol effects | ✅ pass | ✅ pass | all 6 effects logged "ran"; rendered ([screenshots](artifacts/)) |
-| 2 | Pinned across top / in menu-bar region | ✅ pass | ✅ pass | `level = .mainMenu+1 = 25`; [`fullscreen.png`](artifacts/fullscreen.png) shows it over the menu bar |
+| 1 | Live AppKit/CALayer tree running **native** SF Symbol effects | ✅ pass | ✅ pass | all 6 effects logged "ran"; rendered ([screenshots](code/artifacts/)) |
+| 2 | Pinned across top / in menu-bar region | ✅ pass | ✅ pass | `level = .mainMenu+1 = 25`; [`fullscreen.png`](code/artifacts/fullscreen.png) shows it over the menu bar |
 | 3 | Appears on **all Spaces** | ⚙️ configured | ⚙️ configured (+ sticky tag) | `collectionBehavior` has `.canJoinAllSpaces` (raw `337`). **Visual confirmation across a Space switch needs a human** — could not be automated. |
 | 4 | Never steals keyboard focus / activation (no Dock, no Cmd-Tab) | ✅ pass | ✅ pass | frontmost app stayed **Claude** before/during/at-quit; panel never key/main; `NSApp.isActive=false`; `.accessory` + `LSUIElement` |
 | 5 | Floats above fullscreen apps | ⚙️ configured | ⚙️ configured (+ SLS level) | `.fullScreenAuxiliary` + `CGShieldingWindowLevel()`. **Visual confirmation over a fullscreen app needs a human.** |
@@ -100,9 +100,9 @@ as the decisions require. Gate every effect behind `if #available(macOS 14/26, *
 
 | File | Shows |
 |---|---|
-| [`artifacts/bar-window.png`](artifacts/bar-window.png) | A2 bar window: hierarchical-teal `wifi`, monochrome `speaker`, multicolor `battery`, red-palette `bell` (5th symbol mid-`drawOff`, i.e. hidden) |
-| [`artifacts/bar-window-a1.png`](artifacts/bar-window-a1.png) | A1 bar with all 5 symbols visible incl. `square.and.arrow.up` drawn-on and `bell.slash` (magic-replace toggled) |
-| [`artifacts/fullscreen.png`](artifacts/fullscreen.png) | full screen — the bar pinned across the very top, rendering **over the system menu-bar region** |
+| [`artifacts/bar-window.png`](code/artifacts/bar-window.png) | A2 bar window: hierarchical-teal `wifi`, monochrome `speaker`, multicolor `battery`, red-palette `bell` (5th symbol mid-`drawOff`, i.e. hidden) |
+| [`artifacts/bar-window-a1.png`](code/artifacts/bar-window-a1.png) | A1 bar with all 5 symbols visible incl. `square.and.arrow.up` drawn-on and `bell.slash` (magic-replace toggled) |
+| [`artifacts/fullscreen.png`](code/artifacts/fullscreen.png) | full screen — the bar pinned across the very top, rendering **over the system menu-bar region** |
 
 (No screen recording captured — the agent harness can't drive a continuous capture; the
 animation cadence is visible across the stills and effect-log instead.)
@@ -133,7 +133,7 @@ animation cadence is visible across the stills and effect-log instead.)
    in the same run-loop turn as `orderFront`; query after the window settles.
 5. **Bundle identity matters:** running as a bare binary logs
    `[WindowTab] … missing main bundle identifier`. Not the crash cause, but the product
-   is a real `.app` bundle anyway (see [`bundle.sh`](bundle.sh)).
+   is a real `.app` bundle anyway (see [`bundle.sh`](code/bundle.sh)).
 6. **Permissions:** creating/showing the bar triggered **no** TCC prompt. (Screen capture
    for these findings used the host terminal's existing Screen Recording grant; the bar
    itself needs no special permission to render or to retag via SLS.)
@@ -164,10 +164,10 @@ architecture.**
 ## Reproduce
 
 ```sh
-cd spikes/spike-a
+cd tasks/spike-a/code
 ./bundle.sh                                   # builds + wraps in SpikeA.app
 SpikeA.app/Contents/MacOS/SpikeA --approach a2 --anim   # the bar; Ctrl-C to quit
 # flags: --approach a1|a2 · --anim|--idle · --seconds N · --only bounce|pulse|varcolor|replace|draw · --space
 ```
 
-Throwaway de-risking code — **not the product**. See [`README.md`](README.md).
+Throwaway de-risking code — **not the product**. See [`README.md`](code/README.md).

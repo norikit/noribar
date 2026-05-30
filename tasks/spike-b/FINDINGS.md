@@ -27,12 +27,12 @@ Measured on macOS 26.3, Apple Silicon, Swift 6.3.2, debug build.
 with hand-rolled Swift bindings over the C API. It is the smallest dependency, gives total
 control, matches "embed a runtime" exactly, and builds with zero external tooling.
 
-**Vendoring** (see [`Sources/CLua/VENDORING.md`](Sources/CLua/VENDORING.md)):
+**Vendoring** (see [`Sources/CLua/VENDORING.md`](code/Sources/CLua/VENDORING.md)):
 - All upstream `src/*.c` **except** `lua.c`/`luac.c` (those carry `main()`).
 - All `src/*.h`, plus an umbrella (`clua.h`) that exposes **only** the public API to Swift,
   a `module.modulemap`, and one hand-written shim (`lua_shims.h`, below).
 - Compiled with `-DLUA_USE_MACOSX`. No upstream source modified.
-- **License: MIT** ([`LUA-LICENSE.txt`](Sources/CLua/LUA-LICENSE.txt)) — compatible with
+- **License: MIT** ([`LUA-LICENSE.txt`](code/Sources/CLua/LUA-LICENSE.txt)) — compatible with
   noribar's AGPL-3.0. SHA-256 of the tarball is recorded for reproducibility.
 
 **The one piece of required glue:** Lua exposes much of its C API as *function-like
@@ -208,7 +208,7 @@ At a bar's realistic cadence (≤ a few updates/sec) the Lua boundary cost is **
 ## 8. The runnable spike
 
 ```
-spikes/spike-b/
+tasks/spike-b/code/
 ├── Package.swift                 SwiftPM: CLua (C) + SpikeB (executable), macOS 13+
 ├── config.lua                    sample: clock, blinking center item, simulated event
 ├── Sources/
@@ -229,7 +229,7 @@ spikes/spike-b/
 Run it:
 
 ```sh
-cd spikes/spike-b
+cd tasks/spike-b/code
 swift run SpikeB              # live bar; edit config.lua to hot-reload
 swift run SpikeB --selftest   # measurement + reload + crash-isolation battery, then exit
 ```

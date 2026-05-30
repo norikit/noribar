@@ -35,4 +35,5 @@ Domain terms used across noribar's docs and code.
   clock, …) that emits events into the Lua layer. noribar's replacement for
   sketchybar's per-event script spawning ([Q3](open-questions.md)).
 - **Spike** — a throwaway, timeboxed experiment to answer one technical risk question.
-  See [../spikes/](../spikes/).
+  Spikes (and all other work items) live as task folders under
+  [`tasks/`](../../tasks/) — see the [task index](../../tasks/README.md).

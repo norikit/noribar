@@ -1,3 +1,18 @@
+---
+id: spike-b
+name: Embedded Lua runtime driving a live, hot-reloadable bar
+type: spike
+status: complete
+verdict: GO
+created: 2026-05-30
+updated: 2026-05-30
+resolves: [Q2]
+decisions: [D7]
+depends_on: []
+artifacts: ./code
+findings: ./FINDINGS.md
+---
+
 # Spike B — Embedded Lua runtime driving a live, hot-reloadable bar
 
 > **This is a self-contained brief for an autonomous coding agent.** You have no prior
@@ -113,14 +128,14 @@ timer calling back into Lua, and an event subscription** all working end to end.
 
 ## Tasks
 
-1. Scaffold a throwaway Swift macOS **app** under `spikes/spike-b/` (Xcode project or
+1. Scaffold a throwaway Swift macOS **app** under `tasks/spike-b/code/` (Xcode project or
    SwiftPM executable creating an `NSApplication`). Min target macOS 13.
 2. Embed the chosen Lua and get a trivial script (`print` / return a value) executing
    from Swift.
 3. Build the bindings API above and a tiny bar-state model. Render it in a **plain
    `NSWindow`** as a horizontal strip of `NSTextField`/`NSImageView` items (public
    AppKit only).
-4. Ship a sample `spikes/spike-b/config.lua` that creates items, runs a **live clock**
+4. Ship a sample `tasks/spike-b/code/config.lua` that creates items, runs a **live clock**
    updating once per second via `bar.every`, and updates an item from a **simulated
    event** (fire `front_app_switched` from a timer or a keypress).
 5. Implement **hot reload**: watch `config.lua` (or a manual trigger), tear down the
@@ -141,11 +156,11 @@ timer calling back into Lua, and an event subscription** all working end to end.
 - **No SkyLight / private window APIs** — plain `NSWindow` only (decoupling from
   Spike A). No multi-monitor, no real system providers, no item layout engine beyond a
   simple strip.
-- All code stays under `spikes/spike-b/`. Do not touch other paths.
+- All code stays under `tasks/spike-b/code/`. Do not touch other paths.
 - Bundle/license note: record Lua's license (MIT) and how it's vendored, since this is
   an open-source project.
 
-## Deliverable — write `spikes/spike-b/FINDINGS.md` with:
+## Deliverable — write `tasks/spike-b/FINDINGS.md` with:
 
 1. **Verdict (go/no-go):** one line — can embedded Lua drive a live, hot-reloadable,
    crash-isolated bar with acceptable overhead, yes/no.
@@ -158,6 +173,6 @@ timer calling back into Lua, and an event subscription** all working end to end.
 5. **Hot-reload + crash-isolation results:** does it work, edge cases, leak findings.
 6. **Measurements:** per-tick overhead, memory, reload latency, post-100-reload memory.
 7. **Risks & surprises** for the real implementation.
-8. **The runnable spike code + `config.lua`** committed under `spikes/spike-b/`.
+8. **The runnable spike code + `config.lua`** committed under `tasks/spike-b/code/`.
 
 Keep `FINDINGS.md` skimmable and lead with the verdict.

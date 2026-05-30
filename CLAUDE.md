@@ -20,6 +20,10 @@ decisions do. Read these in order:
 5. **[sketchybar-reference.md](docs/knowledge-base/sketchybar-reference.md)** and
    **[glossary.md](docs/knowledge-base/glossary.md)** — reference as needed.
 
+The knowledge base is the durable **design** truth. For **what is being worked on right
+now** — and what to pick up next — read the task board at **[`tasks/`](tasks/)**
+([tasks/README.md](tasks/README.md)) alongside [status.md](docs/knowledge-base/status.md).
+
 ## The locked decisions (do not violate without instruction)
 
 - **Swift**, targeting **macOS 13+** (features degrade gracefully on older versions).
@@ -37,8 +41,10 @@ land a change, or learn something durable:
 - Update the relevant file in `docs/knowledge-base/` **in the same change**.
 - When a decision is made → add/update [decisions.md](docs/knowledge-base/decisions.md).
 - When the design changes → update [architecture.md](docs/knowledge-base/architecture.md).
-- When a question is resolved → move it from
-  [open-questions.md](docs/knowledge-base/open-questions.md) into decisions/architecture.
+- When a question is resolved → record it in decisions/architecture and replace its entry in
+  [open-questions.md](docs/knowledge-base/open-questions.md) with a one-line resolved-pointer.
+- When you start or finish a task → update its `status:` in `tasks/<id>/task.md` and the
+  status column in [tasks/README.md](tasks/README.md).
 - Append a dated line to [status.md](docs/knowledge-base/status.md) for meaningful progress.
 - Update [README.md](README.md) when user-facing facts (goals, status, build steps) change.
 - If you add a new knowledge-base file, link it from
@@ -64,5 +70,8 @@ Stale docs are worse than no docs. If you change reality, change the knowledge b
 ## Conventions
 
 - Match surrounding Swift style; favor clarity and low-latency, main-thread-safe UI code.
-- Spike / throwaway experiments live under `spikes/` (or `docs/spikes/` for their briefs)
-  and are explicitly **not** the product.
+- All work items (spikes, milestones, chores) live as task folders under `tasks/` — see
+  [`tasks/README.md`](tasks/README.md). Each task is a folder with a `task.md` (stateful
+  frontmatter + brief), optional `FINDINGS.md`, and, for PoC/research tasks, a `code/`
+  subdir. That throwaway PoC code is explicitly **not** the product; real product code will
+  live under `Sources/` at the repo root.

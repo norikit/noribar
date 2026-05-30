@@ -1,3 +1,18 @@
+---
+id: spike-a
+name: SkyLight window hosting live AppKit + SF Symbol effects
+type: spike
+status: complete
+verdict: GO
+created: 2026-05-30
+updated: 2026-05-30
+resolves: [Q1]
+decisions: [D6]
+depends_on: []
+artifacts: ./code
+findings: ./FINDINGS.md
+---
+
 # Spike A — SkyLight window hosting live AppKit + SF Symbol effects
 
 > **This is a self-contained brief for an autonomous coding agent.** You have no prior
@@ -125,7 +140,7 @@ derived from `CGWindowLevelForKey` / referenced from yabai; experiment.
 ## Tasks
 
 1. Scaffold a throwaway Swift macOS **app** (Xcode project or SwiftPM executable that
-   creates an `NSApplication`) under `spikes/spike-a/`. App, not unit test — you need a
+   creates an `NSApplication`) under `tasks/spike-a/code/`. App, not unit test — you need a
    real window on screen. Min deployment target macOS 13; build on the latest SDK
    available.
 2. Implement A1, then A2 (and the A3 feasibility note). Put a horizontal strip across
@@ -151,12 +166,12 @@ derived from `CGWindowLevelForKey` / referenced from yabai; experiment.
 - Throwaway quality is fine; clarity of the **findings** matters more than code polish.
 - Do **not** implement Lua, config, multi-monitor, the item data model, or any product
   feature. Scope is strictly window + render + symbol effects.
-- All code stays under `spikes/spike-a/`. Do not touch other paths.
+- All code stays under `tasks/spike-a/code/`. Do not touch other paths.
 - If a private API crashes or is unavailable, that is a **valid finding** — document it
   with the exact symbol/signature and OS version; do not rabbit-hole indefinitely.
 - Note codesigning/entitlement/permission prompts you hit (these inform distribution).
 
-## Deliverable — write `spikes/spike-a/FINDINGS.md` with:
+## Deliverable — write `tasks/spike-a/FINDINGS.md` with:
 
 1. **Verdict (go/no-go):** one line — can AppKit symbol effects live in a
    SkyLight-empowered window, yes/no.
@@ -168,6 +183,6 @@ derived from `CGWindowLevelForKey` / referenced from yabai; experiment.
 6. **Screenshots / recording** paths.
 7. **Risks & surprises** for the real implementation (per-OS forks, permissions,
    anything fragile).
-8. **The runnable spike code** committed under `spikes/spike-a/`.
+8. **The runnable spike code** committed under `tasks/spike-a/code/`.
 
 Keep `FINDINGS.md` skimmable and lead with the verdict.
