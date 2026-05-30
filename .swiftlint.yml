@@ -33,3 +33,22 @@ file_length:
 type_body_length:
   warning: 350
   error: 500
+
+# C-interop idioms. noribar bridges two C APIs (the Lua C-API and private SkyLight) and
+# these names are deliberate conventions, not sloppiness:
+#   - `L` is THE Lua C-API name for a `lua_State *` — kept verbatim for anyone who knows Lua.
+#   - C-style constant/typealias names carry underscores (RTLD_DEFAULT; the @convention(c)
+#     function typealiases `Fn_…`).
+# Everything else uses descriptive Swift names.
+identifier_name:
+  # Short names are idiomatic throughout the two C bridges and tight closures: `L` is the
+  # Lua C-API name for a lua_State, `id`/`vm` and loop vars (`k`, `v`, `t`) read fine. The
+  # rest of identifier_name (casing, max length, allowed symbols) still applies.
+  min_length:
+    warning: 1
+  excluded:
+    - L                    # the Lua C-API name for a `lua_State *` (kept verbatim)
+  allowed_symbols: ["_"]   # C-style constants like RTLD_DEFAULT
+
+type_name:
+  allowed_symbols: ["_"]   # @convention(c) typealias names like Fn_SetWindowLevel

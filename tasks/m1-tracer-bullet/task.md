@@ -2,15 +2,15 @@
 id: m1-tracer-bullet
 name: "Integration tracer bullet: Lua → SkyLight-hosted symbol-effect bar"
 type: milestone
-status: ready
+status: complete
 verdict: n/a
 created: 2026-05-30
 updated: 2026-05-30
-resolves: [Q4, Q5]
-decisions: []
+resolves: [Q4]                    # Q4 fully (→D8); Q5 + front-app slice of Q3 partially
+decisions: [D8]
 depends_on: [spike-a, spike-b]
-artifacts: null
-findings: null
+artifacts: ../../Sources          # first product code (NOT throwaway) — lives at repo root
+findings: ./FINDINGS.md
 ---
 
 # M1 — Integration tracer bullet: Lua → SkyLight-hosted symbol-effect bar

@@ -1,26 +1,29 @@
 # Project status
 
-**Current phase:** De-risking **complete** (both spikes GO). Foundational architecture
-locked ([D6](decisions.md)/[D7](decisions.md)); next is the first product skeleton,
-[M1](../../tasks/m1-tracer-bullet/task.md). No buildable product yet.
+**Current phase:** First product skeleton **built** — milestone
+[M1](../../tasks/m1-tracer-bullet/task.md) landed. Real product code now lives under
+`Sources/`. Foundational architecture locked: D6/D7 (spikes) + **D8** (M1's render/update
+model). Not yet a daily-driver bar.
 
-**Next milestone:** both de-risking spikes are **complete (GO)** —
-[Spike A](../../tasks/spike-a/task.md) ([findings](../../tasks/spike-a/FINDINGS.md),
-[D6](decisions.md)) and [Spike B](../../tasks/spike-b/task.md)
-([findings](../../tasks/spike-b/FINDINGS.md), [D7](decisions.md)). The two riskiest unknowns
-(AppKit-in-SLS bridge; embedded Lua + threading) are now resolved. The next milestone is
-**[M1 — the integration tracer bullet](../../tasks/m1-tracer-bullet/task.md)**: join the two
-decoupled spikes into the first product skeleton (drive the Lua command stream into the
-SLS-hosted symbol-effect tree), which forces the item model (Q5) and render loop (Q4). See
-the live [task board](../../tasks/README.md). Pending follow-up: a 2-minute manual on-screen
-confirmation of Spike A's all-Spaces / over-fullscreen behavior (run
-`tasks/spike-a/code/run-demo.sh`).
+**What's built:** a single `noribar` app where a hot-reloadable `config.lua` drives an
+AppKit/CALayer bar hosted in a private-SkyLight `NSPanel`; a Lua timer and a real
+`FrontAppProvider` mutate items; mutations flow Lua-queue → `BarCommand` → main thread →
+`ItemView`; and an icon swap fires a **native SF Symbol effect** while honoring D6's
+one-animation-per-view rule (`SymbolAnimator`). Verified: D6 invariant (headless + a live
+0.1 s stress soak, no RenderBox crash), crash isolation, hot reload, ~0.2% idle CPU.
+
+**Next:** finalize the full item model ([Q5](open-questions.md)) and SF Symbol rendering
+spec ([Q6](open-questions.md)); grow the provider set + event taxonomy
+([Q3](open-questions.md)); decide the Lua sandbox policy ([Q8](open-questions.md)). See the
+live [task board](../../tasks/README.md).
+
+**Pending manual on-screen checks (need a human):** (1) confirm the front-app icon effect is
+visibly animating in the bundled app; (2) the carried-over Spike A check — bar persists
+across Spaces / over fullscreen and never steals focus. Build with `./bundle.sh`.
 
 **Foundational risks (retired):** ~~Q1 (AppKit-in-SLS bridge)~~ **resolved** ·
-~~Q2 (Lua runtime + threading)~~ **resolved**. Next forks are the item data model
-([Q5](open-questions.md)) and render loop ([Q4](open-questions.md)) — both targeted by
-[M1](../../tasks/m1-tracer-bullet/task.md) — and the event/provider system
-([Q3](open-questions.md)).
+~~Q2 (Lua runtime + threading)~~ **resolved** · ~~Q4 (render/update loop)~~ **resolved**
+([D8](decisions.md)).
 
 ---
 
@@ -74,3 +77,15 @@ Append a dated line for each meaningful step (newest at bottom).
   spike briefs moved out of `docs/spikes/` and spike code out of `spikes/`. The knowledge
   base remains the durable design truth; tasks cross-link to it. See the
   [task board](../../tasks/README.md).
+- **2026-05-30** — **M1 (integration tracer bullet) built** — first product code under
+  `Sources/` ([findings](../../tasks/m1-tracer-bullet/FINDINGS.md)). Promoted both spikes
+  (CLua + Lua runtime from B; SLS bridge + non-activating panel from A) and wrote the seam:
+  `BarStore` (main-thread command applier) + `SymbolAnimator` (per-`NSImageView`
+  single-animator unit enforcing D6 via per-turn coalescing + a pure ≤1-animation resolver),
+  `item:set{effect=}` bindings, and a real `FrontAppProvider`. Verified: D6 invariant
+  (headless planner + a live 0.1 s icon+effect+`.replace` stress soak with **no RenderBox
+  crash**), crash isolation, 50× hot reload, ~0.2% idle CPU, ~12 MB RSS, non-activating SLS
+  panel. Locked the render/update model as [D8](decisions.md); resolved Q4; landed a minimal
+  item schema (Q5 start) and the front-app slice of Q3. **Symbol effects require a real
+  `.app` bundle** (`bundle.sh`) — RenderBox crashes from a bare executable. Two on-screen
+  checks remain manual.
