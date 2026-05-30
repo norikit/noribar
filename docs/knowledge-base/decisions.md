@@ -131,6 +131,35 @@ Format: each decision has a status, the decision, and the rationale.
     main side to respect [D6](#d6--windowrender-bridge-public-nspanel--additive-sls-retag-spike-a-outcome)'s
     one-animation-per-`NSImageView` rule.
 
+## D8 — Render/update model: no app-managed frame loop; per-item single-animator coalescing (M1 outcome)
+
+- **Status:** Locked (2026-05-30) — resolves former open question Q4, via
+  [M1](../../tasks/m1-tracer-bullet/task.md) ([findings](../../tasks/m1-tracer-bullet/FINDINGS.md)).
+- **Decision:**
+  - **No app-managed display link / frame loop.** Unlike sketchybar (CVDisplayLink + manual
+    CGContext redraw), noribar lets **CoreAnimation drive symbol effects**. The app schedules
+    no per-frame work; idle CPU is ~0% by construction (measured ~0.2% under the sample
+    config, whose only wakeups are Lua timers). A future continuously-animating item type
+    (graph/slider) may reintroduce a display link **scoped to those items** — not global.
+  - **`BarStore` (main thread) is the single applier** of `BarCommand`s (the D7 marshalling
+    target: `LuaRuntime.emit` → `DispatchQueue.main.async { store.apply(cmd) }`).
+  - **`SymbolAnimator` is the per-`NSImageView` single-animator unit that enforces D6.** It
+    (a) **coalesces** rapid `:set`s into one apply per run-loop turn (one
+    `DispatchQueue.main.async` flush; last-writer-wins for the effect), and (b) resolves the
+    desired state into **≤ 1 animating mutation, never a content transition *and* a discrete
+    effect together** (a `.replace` swap is itself the animation; a discrete effect is a plain
+    image set + one `addSymbolEffect`). The resolver is a **pure function**, unit-tested
+    headlessly; the live guarantee was confirmed by a 0.1 s icon+effect+`.replace` stress soak
+    with no RenderBox crash.
+- **Consequence:** the coalescing window is "one run-loop turn." "Last effect wins per turn"
+  silently drops a second effect stacked in the same turn — acceptable for M1; a future item
+  type wanting sequential effects needs an explicit per-item queue, not collapse-to-one.
+
+> **Item schema (Q5)** is **partially** addressed by M1: a concrete minimal `BarItem`
+> (id + immutable position + mutable icon/label, `:set` taking a transient `effect`) is
+> locked as the starting point, but the full type/property model remains open — see
+> [open-questions.md](open-questions.md) Q5.
+
 ---
 
 ## License

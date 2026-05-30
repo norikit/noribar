@@ -104,19 +104,34 @@ spawning. Design pending (open question #3).
 - **Containment:** private APIs and per-OS forks live behind boundaries, never sprayed
   through the codebase.
 
-## The integration seam (next to build)
+## The integration seam (built — M1)
 
-Spike A and Spike B were deliberately decoupled and proven in isolation — Spike A drove a
-hard-coded symbol strip in the SLS panel; Spike B drove its `BarCommand` stream into a plain
-`NSWindow`. **Nothing yet drives the Lua command stream into the SLS-hosted symbol-effect
-tree.** That seam — `BarCommand` → main-thread renderer that honors D6's
-one-animation-per-view rule — is the central remaining unknown and the first product build:
-**[M1 — integration tracer bullet](../../tasks/m1-tracer-bullet/task.md)**. Building it forces
-the item data model (Q5) and the render-loop lifecycle (Q4) to firm up.
+Spike A and Spike B were deliberately decoupled; **[M1](../../tasks/m1-tracer-bullet/task.md)**
+joined them into the first product code under `Sources/`. The seam — `BarCommand` →
+main-thread renderer honoring D6's one-animation-per-view rule — now exists and is verified
+(see [findings](../../tasks/m1-tracer-bullet/FINDINGS.md), locked as [D8](decisions.md)).
+
+```
+Sources/
+  CLua/                 vendored Lua 5.4.7 (MIT), SwiftPM C target            (D7)
+  noribar/
+    Window/  WindowBackend protocol · SkyLightPanel · SLS (dlsym bridge)      (D3·D6)
+    Render/  BarView (regions) · ItemView (single-animator unit) · SymbolAnimator (D2·D6·D8)
+    Model/   BarItem (schema, Q5) · BarCommand · BarStore (main-thread applier) (D7·D8)
+    Lua/     LuaRuntime (lua_State on serial queue) · Bindings · ConfigWatcher  (D4·D7)
+    Providers/ Provider · FrontAppProvider (front-app slice of Q3)
+```
+
+Flow: `LuaRuntime` (serial queue) emits `BarCommand`s → `DispatchQueue.main.async` →
+`BarStore.apply` → `ItemView`; icon/effect changes route through that item's `SymbolAnimator`,
+which coalesces per run-loop turn and applies ≤1 animation (D8). `FrontAppProvider` observes
+`NSWorkspace` front-app changes and fires `front_app_switched` into the Lua layer.
 
 ## Open architectural questions
 
-See [open-questions.md](open-questions.md) — notably the event/provider system (Q3),
-render-loop scoping (Q4), and the item data model (Q5). Both foundational bridges are now
-resolved: the AppKit-in-SLS bridge (former Q1 → [D6](decisions.md)) and the Lua
-runtime/threading model (former Q2 → [D7](decisions.md)).
+See [open-questions.md](open-questions.md). Resolved so far: the AppKit-in-SLS bridge
+(former Q1 → [D6](decisions.md)), the Lua runtime/threading model (former Q2 →
+[D7](decisions.md)), and the render/update-loop model (former Q4 → [D8](decisions.md)). M1
+also landed a concrete *minimal* item schema (a starting point for Q5) and the front-app
+slice of the provider system (Q3). Still open: the full item model (Q5), the event/provider
+taxonomy and external-plugin question (Q3), and the SF Symbol rendering spec (Q6).

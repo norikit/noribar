@@ -1,0 +1,4 @@
+module CLua {
+    header "clua.h"
+    export *
+}
