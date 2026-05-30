@@ -24,6 +24,20 @@ The knowledge base is the durable **design** truth. For **what is being worked o
 now** — and what to pick up next — read the task board at **[`tasks/`](tasks/)**
 ([tasks/README.md](tasks/README.md)) alongside [status.md](docs/knowledge-base/status.md).
 
+## Primary architectural directive
+
+**This is a standing instruction from the project owner.** It overrides any instinct toward simplicity-at-the-cost-of-flexibility:
+
+> **Always include an escape hatch.** Every feature must offer a sane default or a simple declarative option AND a lower-level path that gives the user full control. A user who accepts defaults should never feel limited; a user who wants to go deep should never hit a wall.
+
+In practice: when designing an API or data model, ask "what does the power user need that the simple config can't express?" and make sure it is reachable. Examples already in the design:
+- Animation: simple easing curve **or** a user-supplied Lua function `(old_state, new_state, frame) → new_state`.
+- Object layout: sequential flow **or** absolute position within the layer.
+- Element sizing: autosize **or** fixed dimensions with clip/wrap control.
+- Notch transition: built-in move animation **or** user-defined transform function.
+
+Apply this to every new API surface, configuration option, and rendering decision.
+
 ## The locked decisions (do not violate without instruction)
 
 - **Swift**, targeting **macOS 13+** (features degrade gracefully on older versions).
