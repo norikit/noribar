@@ -11,7 +11,7 @@ tasks link back to via their `resolves:` / `decisions:` fields.
 |---|---|---|---|---|---|
 | [spike-a](spike-a/task.md) — SkyLight window hosting live AppKit + SF Symbol effects | spike | ✅ complete | GO | Q1 | [D6](../docs/knowledge-base/decisions.md) |
 | [spike-b](spike-b/task.md) — Embedded Lua runtime driving a live, hot-reloadable bar | spike | ✅ complete | GO | Q2 | [D7](../docs/knowledge-base/decisions.md) |
-| [m1-tracer-bullet](m1-tracer-bullet/task.md) — Lua → SkyLight symbol-effect bar | milestone | 🟡 ready | — | Q4, Q5 | — |
+| [m1-tracer-bullet](m1-tracer-bullet/task.md) — Lua → SkyLight symbol-effect bar | milestone | ✅ complete | — | Q4 | [D8](../docs/knowledge-base/decisions.md) |
 
 ## Layout
 

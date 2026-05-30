@@ -6,8 +6,10 @@ and built around **native, fully-animated SF Symbols**.
 
 A [**norikit**](https://github.com/norikit) project.
 
-> **Status:** de-risking complete — both foundational spikes are GO; building the first
-> product skeleton. Not yet usable. See [project status](docs/knowledge-base/status.md).
+> **Status:** the first product skeleton is up. A single app now drives an AppKit bar in a
+> private-SkyLight window from a hot-reloadable Lua config, and a Lua callback fires a native
+> SF Symbol effect — milestone **M1**. Not yet a daily driver. See
+> [project status](docs/knowledge-base/status.md).
 
 ## Why another bar?
 
@@ -64,19 +66,22 @@ Full rationale: [decisions.md](docs/knowledge-base/decisions.md).
 
 ## Project status
 
-Both foundational de-risking spikes are **complete (GO)** — the two riskiest unknowns are
-resolved and the project is moving to its first product skeleton:
+Both foundational de-risking spikes are **complete (GO)**, and **M1 — the integration tracer
+bullet** has landed: the spikes are joined into the first product code under
+[`Sources/`](Sources/).
 
 - [Spike A](tasks/spike-a/task.md) — AppKit symbol effects inside a SkyLight-empowered
-  window. **✅ GO:** native effects at 0.0% idle CPU in a non-activating `NSPanel` with SLS
-  applied additively (locked as [D6](docs/knowledge-base/decisions.md)).
+  window. **✅ GO** ([D6](docs/knowledge-base/decisions.md)).
 - [Spike B](tasks/spike-b/task.md) — embedded Lua driving a live, hot-reloadable bar.
-  **✅ GO:** vanilla Lua 5.4.7 on a dedicated serial queue, ~1.7 µs/tick, crash-isolated and
-  hot-reloadable (locked as [D7](docs/knowledge-base/decisions.md)).
+  **✅ GO** ([D7](docs/knowledge-base/decisions.md)).
+- [M1](tasks/m1-tracer-bullet/task.md) — Lua command stream → SkyLight-hosted symbol-effect
+  tree. **✅ built:** a `config.lua` drives the bar, the `FrontAppProvider` swaps an icon with
+  a native effect, and the one-animation-per-view rule (D6) is enforced by `SymbolAnimator`
+  and verified under a live 0.1 s stress loop with no RenderBox crash. See its
+  [findings](tasks/m1-tracer-bullet/FINDINGS.md).
 
-**Next:** [M1 — the integration tracer bullet](tasks/m1-tracer-bullet/task.md), wiring the
-Lua command stream into the SkyLight-hosted symbol-effect tree. All work is tracked on the
-[task board](tasks/README.md); progress in [status.md](docs/knowledge-base/status.md).
+All work is tracked on the [task board](tasks/README.md); progress in
+[status.md](docs/knowledge-base/status.md).
 
 ## Documentation
 
@@ -97,9 +102,25 @@ Active work (spikes, milestones, chores) is tracked as task folders under
 
 ## Building
 
-_Not yet — the de-risking spikes are complete but the product skeleton hasn't been built.
-Each piece of work lives as a task folder under [`tasks/`](tasks/) (brief + findings +
-any throwaway PoC code); that spike code is **not** the product._
+Requires macOS 13+ and a Swift toolchain.
+
+```sh
+# Headless self-test (no window): the D6 animation-safety invariant, Lua crash isolation,
+# and a hot-reload leak check. Suitable for CI.
+swift run noribar --selftest
+
+# The live bar. NOTE: native SF Symbol effects need a real .app bundle — the animation
+# engine (RenderBox) crashes from a bare executable — so to SEE effects, bundle first:
+./bundle.sh && open noribar.app
+
+# Stress the one-animation-per-view rule (D6) on a real display:
+./bundle.sh && ./noribar.app/Contents/MacOS/noribar --stress
+```
+
+Edit [`config.lua`](config.lua) while noribar runs to **hot-reload** it. Product code lives
+under [`Sources/`](Sources/) (`CLua` = vendored Lua; `noribar` = the app, split into
+`Window` / `Render` / `Model` / `Lua` / `Providers`). The throwaway spike code under
+[`tasks/`](tasks/) is **not** the product.
 
 ## License
 

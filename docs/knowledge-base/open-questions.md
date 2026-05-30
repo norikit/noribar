@@ -25,17 +25,27 @@ floor) are **already decided** — see [decisions.md](decisions.md) D2–D5.
 In-process native providers (workspace, battery, network, audio, clock, front app) with
 Lua callbacks — and do we also support external script plugins as an escape hatch /
 sketchybar-compat? Event taxonomy and subscription API.
+→ **Partially addressed by [M1](../../tasks/m1-tracer-bullet/task.md):** the `Provider`
+protocol + a real `FrontAppProvider` (`front_app_switched`) prove the
+provider → Lua → render path. Still open: the full provider set, the event taxonomy, and
+the external-plugin/sketchybar-compat question.
 
-### Q4 — Render loop & redraw scoping
-How much to lean on CoreAnimation implicit animation vs. an explicit animator. Per-item
-dirty redraw vs. full-bar. Display-link lifecycle (idle teardown). ProMotion handling.
-→ first cut targeted by **[M1](../../tasks/m1-tracer-bullet/task.md)**.
+> **Q4 (Render loop & redraw scoping) — RESOLVED 2026-05-30** by
+> [M1](../../tasks/m1-tracer-bullet/task.md). Locked in [decisions.md D8](decisions.md):
+> **no app-managed frame loop** (CoreAnimation drives effects; idle ~0% CPU), `BarStore` as
+> the single main-thread applier, and per-`NSImageView` coalescing in `SymbolAnimator`
+> (one apply per run-loop turn, ≤1 animation — the D6 guard). A scoped display link may
+> return only for future continuously-animating items.
 
 ### Q5 — Item / component data model
 The schema users configure against: item types (label, icon/symbol, graph, slider,
 group, popup, alias of real menu-bar apps?), property set, layout regions
 (left/center/right), ordering, and how Lua mutates it.
-→ minimal version (label + icon + position) targeted by **[M1](../../tasks/m1-tracer-bullet/task.md)**.
+→ **Minimal version landed in [M1](../../tasks/m1-tracer-bullet/task.md)** (and noted under
+[D8](decisions.md)): `BarItem` = id + immutable position (left/center/right) + mutable
+icon/label, with `:set` taking a transient `effect`. The full type/property model (graphs,
+sliders, groups, popups, aliases, styling, ordering, click handlers) is **still open** —
+finalize from this concrete starting point.
 
 ### Q6 — SF Symbol rendering spec
 Pin the exact "fully-featured" surface: rendering modes (mono/hierarchical/palette/
