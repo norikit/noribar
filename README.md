@@ -1,10 +1,4 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/status-active-32C572?style=flat-square" alt="Status: active"/>
-  <img src="https://img.shields.io/badge/ecosystem-norikit-32C572?style=flat-square" alt="Ecosystem: norikit"/>
-  <img src="https://img.shields.io/badge/license-AGPL--3.0-blue?style=flat-square" alt="License: AGPL-3.0"/>
-</p>
-
-<p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/norikit/norikit/main/assets/noribar/hero/dark_theme.svg"/>
     <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/norikit/norikit/main/assets/noribar/hero/light_theme.svg"/>
