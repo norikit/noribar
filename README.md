@@ -1,15 +1,26 @@
-# noribar
+<p align="center">
+  <img src="https://img.shields.io/badge/status-active-32C572?style=flat-square" alt="Status: active"/>
+  <img src="https://img.shields.io/badge/ecosystem-norikit-32C572?style=flat-square" alt="Ecosystem: norikit"/>
+  <img src="https://img.shields.io/badge/license-AGPL--3.0-blue?style=flat-square" alt="License: AGPL-3.0"/>
+</p>
 
-A fast, fully-customizable **macOS menu bar replacement** for the ricing community —
-written in Swift, inspired by [sketchybar](https://github.com/FelixKratz/SketchyBar),
-and built around **native, fully-animated SF Symbols**.
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/norikit/norikit/main/assets/noribar/hero/dark_theme.svg"/>
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/norikit/norikit/main/assets/noribar/hero/light_theme.svg"/>
+    <img src="https://raw.githubusercontent.com/norikit/norikit/main/assets/noribar/hero/light_theme.svg" alt="noribar" width="100%"/>
+  </picture>
+</p>
 
-A [**norikit**](https://github.com/norikit) project.
+<p align="center">
+  A fast, fully-customizable <strong>macOS menu bar replacement</strong> for the ricing community —<br/>
+  written in Swift, inspired by <a href="https://github.com/FelixKratz/SketchyBar">sketchybar</a>,<br/>
+  and built around <strong>native, fully-animated SF Symbols</strong>.<br/>
+  Part of the <strong><a href="https://github.com/norikit">norikit</a></strong> ecosystem.
+</p>
 
-> **Status:** the first product skeleton is up. A single app now drives an AppKit bar in a
-> private-SkyLight window from a hot-reloadable Lua config, and a Lua callback fires a native
-> SF Symbol effect — milestone **M1**. Not yet a daily driver. See
-> [project status](docs/knowledge-base/status.md).
+> [!NOTE]
+> Active development. The first product skeleton (M1) is built and running. Not yet a daily driver — see [project status](docs/knowledge-base/status.md).
 
 ## Why another bar?
 
