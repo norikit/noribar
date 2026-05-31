@@ -6,7 +6,6 @@ on:
   pull_request:
   workflow_dispatch:
 
-# Cancel superseded runs on the same ref to save runner minutes.
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -15,60 +14,7 @@ permissions:
   contents: read
 
 jobs:
-  swift:
-    name: Build, test & lint (Swift)
-    runs-on: macos-15
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Select Xcode
-        run: sudo xcode-select -s /Applications/Xcode_16.app
-
-      - name: Toolchain versions
-        run: swift --version && xcodebuild -version
-
-      - name: SwiftLint
-        run: |
-          if [ -f .swiftlint.yml ] && command -v swiftlint >/dev/null 2>&1; then
-            swiftlint --strict
-          else
-            echo "::notice::SwiftLint skipped (no .swiftlint.yml or swiftlint unavailable)"
-          fi
-
-      - name: Build & test
-        run: |
-          if [ -f Package.swift ]; then
-            swift build --build-tests
-            swift test
-          else
-            echo "::notice::No Package.swift yet — skipping swift build/test. \
-              This step activates automatically once the SPM package exists."
-          fi
-
-  lua:
-    name: Lint Lua config
-    runs-on: macos-15
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: Detect tracked Lua files
-        id: detect
-        run: |
-          if git ls-files '*.lua' | grep -q .; then
-            echo "found=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "found=false" >> "$GITHUB_OUTPUT"
-            echo "::notice::No .lua files tracked — skipping Lua lint."
-          fi
-
-      - name: Install luacheck + stylua
-        if: steps.detect.outputs.found == 'true'
-        run: brew install luacheck stylua
-
-      - name: luacheck
-        if: steps.detect.outputs.found == 'true'
-        run: git ls-files '*.lua' -z | xargs -0 luacheck
-
-      - name: stylua --check
-        if: steps.detect.outputs.found == 'true'
-        run: git ls-files '*.lua' -z | xargs -0 stylua --check
+  ci:
+    uses: norikit/.github/.github/workflows/swift-ci.yml@main
+    with:
+      lua: true
