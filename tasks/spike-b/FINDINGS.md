@@ -191,7 +191,7 @@ At a bar's realistic cadence (≤ a few updates/sec) the Lua boundary cost is **
    does not preempt cooperatively. A script doing slow-but-finite work each tick is the
    user's problem. A true hang needs the hook **plus** the background queue (have both).
 4. **Symbol-animation constraint meets the binding layer.** Spike A's
-   [D6](../../docs/knowledge-base/decisions.md) hard rule — *one in-flight symbol animation
+   [D6](../../ai-docs/decisions.md) hard rule — *one in-flight symbol animation
    per `NSImageView`* — means `item:set` that changes an icon must **serialize/coalesce
    symbol mutations per item** on the main side. The command model makes this natural
    (collapse rapid `.set`s per id before applying), but it must be built deliberately.

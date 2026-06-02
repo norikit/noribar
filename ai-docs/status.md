@@ -39,7 +39,7 @@ Append a dated line for each meaningful step (newest at bottom).
   ([Spike A](../../tasks/spike-a/task.md),
   [Spike B](../../tasks/spike-b/task.md)), deliberately decoupled (Spike B uses a
   plain NSWindow) so they can run concurrently.
-- **2026-05-30** — Established README + knowledge base (`docs/knowledge-base/`) and
+- **2026-05-30** — Established README + knowledge base (`ai-docs/`) and
   `CLAUDE.md` agent entry point.
 - **2026-05-30** — Named the project **noribar** under the **norikit** org.
 - **2026-05-30** — Added [why-swift.md](why-swift.md): rationale dossier consolidating the

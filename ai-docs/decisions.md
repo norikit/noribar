@@ -165,3 +165,8 @@ Format: each decision has a status, the decision, and the rationale.
 ## License
 
 - **Status:** Locked (inherited) — **AGPL-3.0** (`LICENSE` at repo root).
+
+## Standalone-first (inherited — prime directive #10)
+**Decision:** noribar runs fully on its own as a menu-bar replacement; ecosystem integrations
+(noricore data, noriglaze themes, …) are **optional, availability-gated progressive enhancements** —
+never required. It works with no other norikit tool installed.

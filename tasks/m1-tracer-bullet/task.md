@@ -26,7 +26,7 @@ findings: ./FINDINGS.md
 `sketchybar`, aimed at the "ricing" community. Its headline feature is **native, animated
 SF Symbols** driven by a **user's embedded Lua config**.
 
-Seven decisions are **locked** (see [`docs/knowledge-base/decisions.md`](../../docs/knowledge-base/decisions.md)) —
+Seven decisions are **locked** (see [`ai-docs/decisions.md`](../../ai-docs/decisions.md)) —
 treat them as constraints, do not relitigate:
 
 - **D1** Swift, **D5** macOS 13 floor with graceful degradation.
@@ -206,10 +206,10 @@ end)
    was implemented and stress-tested, the three open decisions above with what you chose/left
    open, measurements, the manual-check result, and risks/surprises for the next milestone.
 3. **Knowledge-base updates in the same change** (standing project rule, see
-   [`CLAUDE.md`](../../CLAUDE.md)): append to [`status.md`](../../docs/knowledge-base/status.md);
+   [`CLAUDE.md`](../../CLAUDE.md)): append to [`status.md`](../../ai-docs/status.md);
    fold the resolved parts of **Q4/Q5** (and the front-app slice of **Q3**) from
-   [`open-questions.md`](../../docs/knowledge-base/open-questions.md) into
-   [`architecture.md`](../../docs/knowledge-base/architecture.md) / a new decision; update
+   [`open-questions.md`](../../ai-docs/open-questions.md) into
+   [`architecture.md`](../../ai-docs/architecture.md) / a new decision; update
    [`README.md`](../../README.md) build steps now that there's a buildable app.
 
 ## Acceptance criteria
@@ -221,8 +221,8 @@ end)
 
 ## References
 
-- Decisions D1–D7: [`docs/knowledge-base/decisions.md`](../../docs/knowledge-base/decisions.md)
-- Architecture: [`docs/knowledge-base/architecture.md`](../../docs/knowledge-base/architecture.md)
-- Open questions Q3–Q10: [`docs/knowledge-base/open-questions.md`](../../docs/knowledge-base/open-questions.md)
+- Decisions D1–D7: [`ai-docs/decisions.md`](../../ai-docs/decisions.md)
+- Architecture: [`ai-docs/architecture.md`](../../ai-docs/architecture.md)
+- Open questions Q3–Q10: [`ai-docs/open-questions.md`](../../ai-docs/open-questions.md)
 - Spike A findings: [`tasks/spike-a/FINDINGS.md`](../spike-a/FINDINGS.md)
 - Spike B findings: [`tasks/spike-b/FINDINGS.md`](../spike-b/FINDINGS.md)
