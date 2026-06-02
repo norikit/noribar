@@ -1,97 +1,67 @@
-# CLAUDE.md — entry point for AI agents working in noribar
+# CLAUDE.md — entry point for agents working in noribar
 
-**You are working on `noribar` (a project of the `norikit` org): a Swift macOS menu bar
-replacement, inspired by sketchybar, built around native animated SF Symbols, for the
-ricing community.**
+<!-- norikit:managed — synced from `template/CLAUDE.md`; do NOT hand-edit.
+     Change the template and re-run sync_scaffold. Edit only the project region below. -->
 
-This file is the front door. Before doing substantive work, read the knowledge base.
+**Read this, then the operating manual.** You are working in a repo of the **norikit** org.
 
-## ⇒ Start here: the knowledge base
+## ⇒ The operating manual
 
-All durable project knowledge lives in **[`docs/knowledge-base/`](docs/knowledge-base/)**.
-It is the single source of truth for design intent — code may not exist yet, but the
-decisions do. Read these in order:
+**[`norikit/ai-docs/framework.md`](https://github.com/norikit/norikit/blob/main/ai-docs/framework.md)**
+is the single entry point for *how we work* — task tracking, the working agreement, branching, and
+quality. Read it before substantive work. The ecosystem mission/conventions live in
+[`norikit/ai-docs/`](https://github.com/norikit/norikit/tree/main/ai-docs); this repo's design
+knowledge lives in [`ai-docs/`](ai-docs/).
 
-1. **[decisions.md](docs/knowledge-base/decisions.md)** — locked architectural choices.
-   Treat as constraints; do not relitigate without explicit user direction.
-2. **[architecture.md](docs/knowledge-base/architecture.md)** — the evolving system design.
-3. **[open-questions.md](docs/knowledge-base/open-questions.md)** — what's still undecided.
-4. **[status.md](docs/knowledge-base/status.md)** — current phase + changelog.
-5. **[sketchybar-reference.md](docs/knowledge-base/sketchybar-reference.md)** and
-   **[glossary.md](docs/knowledge-base/glossary.md)** — reference as needed.
+## The essentials (do not violate)
 
-The knowledge base is the durable **design** truth. For **what is being worked on right
-now** — and what to pick up next — read the task board at **[`tasks/`](tasks/)**
-([tasks/README.md](tasks/README.md)) alongside [status.md](docs/knowledge-base/status.md).
-
-## Primary architectural directive
-
-**This is a standing instruction from the project owner.** It overrides any instinct toward simplicity-at-the-cost-of-flexibility:
-
-> **Always include an escape hatch.** Every feature must offer a sane default or a simple declarative option AND a lower-level path that gives the user full control. A user who accepts defaults should never feel limited; a user who wants to go deep should never hit a wall.
-
-In practice: when designing an API or data model, ask "what does the power user need that the simple config can't express?" and make sure it is reachable. Examples already in the design:
-- Animation: simple easing curve **or** a user-supplied Lua function `(old_state, new_state, frame) → new_state`.
-- Object layout: sequential flow **or** absolute position within the layer.
-- Element sizing: autosize **or** fixed dimensions with clip/wrap control.
-- Notch transition: built-in move animation **or** user-defined transform function.
-
-Apply this to every new API surface, configuration option, and rendering decision.
-
-## The locked decisions (do not violate without instruction)
-
-- **Swift**, targeting **macOS 13+** (features degrade gracefully on older versions).
-- **Rendering:** AppKit + CALayer view tree — chosen so native SF Symbol effects work.
-- **Window:** private SkyLight (SLS/CGS) APIs — all-Spaces, over-fullscreen, non-activating.
-- **Config:** embedded **Lua**.
-- SF Symbol effects require macOS 14+; draw-on/off require macOS 26 / SF Symbols 7 —
-  always gate them behind `if #available`.
-
-## Your responsibility: keep the knowledge base current
-
-**This is a standing instruction from the project owner.** Whenever you make a decision,
-land a change, or learn something durable:
-
-- Update the relevant file in `docs/knowledge-base/` **in the same change**.
-- When a decision is made → add/update [decisions.md](docs/knowledge-base/decisions.md).
-- When the design changes → update [architecture.md](docs/knowledge-base/architecture.md).
-- When a question is resolved → record it in decisions/architecture and replace its entry in
-  [open-questions.md](docs/knowledge-base/open-questions.md) with a one-line resolved-pointer.
-- When you start or finish a task → update its `status:` in `tasks/<id>/task.md` and the
-  status column in [tasks/README.md](tasks/README.md).
-- Append a dated line to [status.md](docs/knowledge-base/status.md) for meaningful progress.
-- Update [README.md](README.md) when user-facing facts (goals, status, build steps) change.
-- If you add a new knowledge-base file, link it from
-  [docs/knowledge-base/README.md](docs/knowledge-base/README.md).
-
-Stale docs are worse than no docs. If you change reality, change the knowledge base.
-
-## Git workflow: always branch, always PR
-
-**This is a standing instruction from the project owner.** Never commit directly to `main`.
-
-- **Always work on a dedicated work branch.** Before making changes, create one off `main`
-  (e.g. `git checkout -b <descriptive-branch>`). If you find yourself on `main`, branch
-  first.
-- **Branch from an up-to-date `main`, and keep `main` up to date.** Before creating a new
-  work branch, sync first: `git fetch origin` and base the branch on the latest `origin/main`
-  (e.g. `git checkout -b <descriptive-branch> origin/main`), and fast-forward your local
-  `main` to `origin/main` (`git checkout main && git pull --ff-only`) so it never drifts.
-  This keeps every branch current with `main` from the start and avoids stale-base conflicts.
-  (After a PR merges, fetch again so the next branch starts from the merged state.)
-- **Open a pull request when you consider the task complete.** Push the branch and run
-  `gh pr create` with a clear title and a body summarizing what changed and why (and how it
-  was verified). Treat the PR as the deliverable — a task is not "done" until its PR exists.
-- **Keep the PR current.** Any follow-up change to the same task — new commits, scope
-  changes, fixes from review — must also update the PR: push the commits and edit the PR
-  title/body (`gh pr edit`) so it always reflects the latest state of the branch.
-- Commit messages and PR bodies should be self-explanatory. License is AGPL-3.0.
+- **Work within the project — no code without a tracked issue.** Find/create a GitHub issue on the
+  right board, meet Definition of Ready (typed · Priority + Size · rich description), pull one to
+  In Progress, then work. Decompose big asks into an epic + sub-issues first. **GitHub issues are the
+  source of truth.**
+- **Always branch, always PR — never commit to `main`.** Branch off fresh `origin/main` as
+  `<type>/<issue#>-<slug>` (`type ∈ feat, fix, chore, spike, docs`); Conventional-Commit messages; open
+  a PR that `Closes #<issue>`; squash-merge after the gates pass (a deliberate human click — no auto-merge).
+- **Standalone-first.** This tool must work on its own; ecosystem integrations (noricore, noriglaze, …)
+  are optional, availability-gated enhancements — never hard dependencies.
+- **Keep `ai-docs/` current in the same change.** If you change reality, change the knowledge base in the
+  same PR. Stale docs are worse than none.
+- **Definition of Done:** merged via PR · `ai-docs` updated · CI green · behavior **verified** (not just
+  green CI) · standalone-first respected · no token/scaffold leftovers. (The issue form carries the checklist.)
 
 ## Conventions
 
-- Match surrounding Swift style; favor clarity and low-latency, main-thread-safe UI code.
-- All work items (spikes, milestones, chores) live as task folders under `tasks/` — see
-  [`tasks/README.md`](tasks/README.md). Each task is a folder with a `task.md` (stateful
-  frontmatter + brief), optional `FINDINGS.md`, and, for PoC/research tasks, a `code/`
-  subdir. That throwaway PoC code is explicitly **not** the product; real product code will
-  live under `Sources/` at the repo root.
+- Match surrounding code style; favor clarity and low-latency, main-thread-safe code.
+- Throwaway PoC/spike code lives in `tasks/<id>/code/` and is **not** the product; real product code
+  lives under `Sources/`.
+- License: **AGPL-3.0**.
+
+<!-- /norikit:managed -->
+
+<!-- norikit:project:start — this repo's own content; sync never overwrites between these markers. -->
+
+## This project: noribar
+
+**noribar** — a macOS menu-bar replacement built around native, fully-animated SF Symbols
+(Swift + AppKit + a private SkyLight window + embedded Lua), inspired by sketchybar.
+
+Durable design knowledge lives in **[`ai-docs/`](ai-docs/)** — decisions · architecture ·
+open-questions · status · glossary, plus **[why-swift.md](ai-docs/why-swift.md)** and
+**[sketchybar-reference.md](ai-docs/sketchybar-reference.md)**. Read **[decisions.md](ai-docs/decisions.md)** first.
+
+### Primary architectural directive — always an escape hatch
+
+**Standing owner instruction.** Every feature offers a sane default / simple declarative option
+**and** a lower-level path with full control — defaults never limit, depth never hits a wall (e.g.
+animation: easing curve *or* a Lua `(old, new, frame) → new`; layout: flow *or* absolute; sizing:
+autosize *or* fixed). Apply to every API, config, and rendering decision.
+
+### Locked decisions (see [ai-docs/decisions.md](ai-docs/decisions.md))
+
+- **Standalone-first** — runs on its own; ecosystem integration (noricore/noriglaze) is optional,
+  availability-gated.
+- **Swift**, **macOS 13+** (degrade gracefully) · **AppKit + CALayer** render · private **SkyLight**
+  window · embedded **Lua** config.
+- SF Symbol effects are macOS 14+ (draw-on/off macOS 26 / SF Symbols 7) — gate behind `if #available`.
+
+<!-- norikit:project:end -->

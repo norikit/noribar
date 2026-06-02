@@ -14,7 +14,7 @@
 </p>
 
 > [!NOTE]
-> Active development. The first product skeleton (M1) is built and running. Not yet a daily driver — see [project status](docs/knowledge-base/status.md).
+> Active development. The first product skeleton (M1) is built and running. Not yet a daily driver — see [project status](ai-docs/status.md).
 
 ## Why another bar?
 
@@ -45,7 +45,7 @@ C + CoreGraphics + shell-script model buys you:
   contribute to, and that degrades gracefully back to macOS 13.
 
 The full engineering rationale (with honest trade-offs vs. sketchybar) lives in
-[why-swift.md](docs/knowledge-base/why-swift.md).
+[why-swift.md](ai-docs/why-swift.md).
 
 ## Goals
 
@@ -67,7 +67,7 @@ The full engineering rationale (with honest trade-offs vs. sketchybar) lives in
 | Configuration | Embedded Lua |
 | Minimum macOS | 13 (Ventura); newer features degrade gracefully (SF Symbol effects 14+; draw-on/off macOS 26 / SF Symbols 7) |
 
-Full rationale: [decisions.md](docs/knowledge-base/decisions.md).
+Full rationale: [decisions.md](ai-docs/decisions.md).
 
 ## Project status
 
@@ -76,9 +76,9 @@ bullet** has landed: the spikes are joined into the first product code under
 [`Sources/`](Sources/).
 
 - [Spike A](tasks/spike-a/task.md) — AppKit symbol effects inside a SkyLight-empowered
-  window. **✅ GO** ([D6](docs/knowledge-base/decisions.md)).
+  window. **✅ GO** ([D6](ai-docs/decisions.md)).
 - [Spike B](tasks/spike-b/task.md) — embedded Lua driving a live, hot-reloadable bar.
-  **✅ GO** ([D7](docs/knowledge-base/decisions.md)).
+  **✅ GO** ([D7](ai-docs/decisions.md)).
 - [M1](tasks/m1-tracer-bullet/task.md) — Lua command stream → SkyLight-hosted symbol-effect
   tree. **✅ built:** a `config.lua` drives the bar, the `FrontAppProvider` swaps an icon with
   a native effect, and the one-animation-per-view rule (D6) is enforced by `SymbolAnimator`
@@ -86,19 +86,19 @@ bullet** has landed: the spikes are joined into the first product code under
   [findings](tasks/m1-tracer-bullet/FINDINGS.md).
 
 All work is tracked on the [task board](tasks/README.md); progress in
-[status.md](docs/knowledge-base/status.md).
+[status.md](ai-docs/status.md).
 
 ## Documentation
 
-All design knowledge lives in the **[knowledge base](docs/knowledge-base/)**:
+All design knowledge lives in the **[knowledge base](ai-docs/)**:
 
-- [Decisions](docs/knowledge-base/decisions.md) — locked architectural choices + rationale
-- [Why Swift](docs/knowledge-base/why-swift.md) — perf comparison + stack benefits vs. sketchybar
-- [Architecture](docs/knowledge-base/architecture.md) — system design (evolving)
-- [Open questions](docs/knowledge-base/open-questions.md) — unresolved design forks
-- [sketchybar reference](docs/knowledge-base/sketchybar-reference.md) — how the inspiration works
-- [Glossary](docs/knowledge-base/glossary.md) — SLS, ricing, SF Symbol terms
-- [Status](docs/knowledge-base/status.md) — current phase + changelog
+- [Decisions](ai-docs/decisions.md) — locked architectural choices + rationale
+- [Why Swift](ai-docs/why-swift.md) — perf comparison + stack benefits vs. sketchybar
+- [Architecture](ai-docs/architecture.md) — system design (evolving)
+- [Open questions](ai-docs/open-questions.md) — unresolved design forks
+- [sketchybar reference](ai-docs/sketchybar-reference.md) — how the inspiration works
+- [Glossary](ai-docs/glossary.md) — SLS, ricing, SF Symbol terms
+- [Status](ai-docs/status.md) — current phase + changelog
 
 Active work (spikes, milestones, chores) is tracked as task folders under
 [`tasks/`](tasks/) — see the [task board](tasks/README.md).

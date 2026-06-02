@@ -2,16 +2,16 @@
 
 Every discrete unit of work on **noribar** — spikes, milestones, chores — lives here as a
 **task folder**, regardless of type. This is the live view of *what is being worked on*;
-durable *design* truth lives in [`docs/knowledge-base/`](../docs/knowledge-base/), which
+durable *design* truth lives in [`ai-docs/`](../ai-docs/), which
 tasks link back to via their `resolves:` / `decisions:` fields.
 
 ## Current tasks
 
 | Task | Type | Status | Verdict | Resolves | Decisions |
 |---|---|---|---|---|---|
-| [spike-a](spike-a/task.md) — SkyLight window hosting live AppKit + SF Symbol effects | spike | ✅ complete | GO | Q1 | [D6](../docs/knowledge-base/decisions.md) |
-| [spike-b](spike-b/task.md) — Embedded Lua runtime driving a live, hot-reloadable bar | spike | ✅ complete | GO | Q2 | [D7](../docs/knowledge-base/decisions.md) |
-| [m1-tracer-bullet](m1-tracer-bullet/task.md) — Lua → SkyLight symbol-effect bar | milestone | ✅ complete | — | Q4 | [D8](../docs/knowledge-base/decisions.md) |
+| [spike-a](spike-a/task.md) — SkyLight window hosting live AppKit + SF Symbol effects | spike | ✅ complete | GO | Q1 | [D6](../ai-docs/decisions.md) |
+| [spike-b](spike-b/task.md) — Embedded Lua runtime driving a live, hot-reloadable bar | spike | ✅ complete | GO | Q2 | [D7](../ai-docs/decisions.md) |
+| [m1-tracer-bullet](m1-tracer-bullet/task.md) — Lua → SkyLight symbol-effect bar | milestone | ✅ complete | — | Q4 | [D8](../ai-docs/decisions.md) |
 
 ## Layout
 
@@ -62,5 +62,5 @@ findings: ./FINDINGS.md           # path to the results doc, or null
 1. `tasks/<id>/task.md` with the frontmatter above (`status: draft` or `ready`).
 2. Add a row to the table in this file.
 3. When it lands, set `status: complete`, fill `verdict` / `findings`, and record any
-   `decisions:` / `resolves:` into [`docs/knowledge-base/`](../docs/knowledge-base/) **in the
+   `decisions:` / `resolves:` into [`ai-docs/`](../ai-docs/) **in the
    same change** (see [CLAUDE.md](../CLAUDE.md)).
